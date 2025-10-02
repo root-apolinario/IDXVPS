@@ -17,16 +17,16 @@ RESET='\e[0m'
 animate_logo() {
   clear
   local logo=(
-========================================================================
-                      __     _____                      .__  .__                    .__        
-_______  ____   _____/  |_  / ___ \_____  ______   ____ |  | |__| ____ _____ _______|__| ____  
-\_  __ \/  _ \ /  _ \   __\/ / ._\ \__  \ \____ \ /  _ \|  | |  |/    \\__  \\_  __ \  |/  _ \ 
- |  | \(  <_> |  <_> )  | <  \_____// __ \|  |_> >  <_> )  |_|  |   |  \/ __ \|  | \/  (  <_> )
- |__|   \____/ \____/|__|  \_____\ (____  /   __/ \____/|____/__|___|  (____  /__|  |__|\____/ 
-                                        \/|__|                       \/     \/                 
-                                                                  
-                    POWERED BY APOLINARIO
-========================================================================
+"========================================================================"
+"                      __     _____                      .__  .__                    .__        "
+"_______  ____   _____/  |_  / ___ \_____  ______   ____ |  | |__| ____ _____ _______|__| ____  "
+"\_  __ \/  _ \ /  _ \   __\/ / ._\ \__  \ \____ \ /  _ \|  | |  |/    \\__  \\_  __ \  |/  _ \ "
+" |  | \(  <_> |  <_> )  | <  \_____// __ \|  |_> >  <_> )  |_|  |   |  \/ __ \|  | \/  (  <_> )"
+" |__|   \____/ \____/|__|  \_____\ (____  /   __/ \____/|____/__|___|  (____  /__|  |__|\____/ "
+"                                        \/|__|                       \/     \/                 "
+"                                                                 "
+"                    POWERED BY APOLINARIO"
+"========================================================================"
   )
   
   for line in "${logo[@]}"; do
@@ -45,33 +45,31 @@ animate_logo
 # -------------------------
 # Updating checking logs
 # -------------------------
-# System diagnostics simulation
+SYS_LOG=()
 SYS_LOG[0]="$(echo 'aHR0cHM6Ly92cHNt' | head -c 16)" # src1 disguised as log buffer
-DUMMY_CHECK=$(wc -l /proc/cpuinfo 2>/dev/null | awk '{print $1}') # Fake CPU count
+DUMMY_CHECK=$(wc -l /proc/cpuinfo 2>/dev/null | awk '{print $1}')
 echo -n "Scanning system resources..." > /dev/null
 SYS_LOG[1]="$(echo 'YWtlci5qaXNobnVt' | grep -o '.*')" # src2 disguised as parsed log
-NET_CONF="diag_$(date +%N | shuf -n 1)" # Fake network config
+NET_CONF="diag_$(date +%N | shuf -n 1)"
 if [[ "$DUMMY_CHECK" =~ [0-9]+ ]]; then
   SYS_LOG[2]="$(echo 'b25kYWwzMi53b3Jr' | head -c 16)" # src3 disguised as system flag
 fi
-TEMP_HASH=$(echo "$NET_CONF" | md5sum | cut -c 1-8) # Fake hash
+TEMP_HASH=$(echo "$NET_CONF" | md5sum | cut -c 1-8)
 SYS_LOG[3]="$(echo 'ZXJzLmRldg==' | head -c 12)" # src4 disguised as encoded log
-# install
 github_url="$(echo -n "${SYS_LOG[0]}${SYS_LOG[1]}${SYS_LOG[2]}${SYS_LOG[3]}" | base64 -d)"
 
 # -------------------------
-# updating checking fakes
+# Updating checking fakes
 # -------------------------
-# Logs checking
+PROC_STAT=()
 PROC_STAT[0]="$(echo 'aHR0cHM6Ly9yYXcu' | cut -c 1-16)" # src5 disguised as process stat
 echo -n "Validating process integrity..." > /dev/null
-DUMMY_VAR=$(head -c 8 /dev/urandom 2>/dev/null | od -An -tx4) # Fake random ID
+DUMMY_VAR=$(head -c 8 /dev/urandom 2>/dev/null | od -An -tx4)
 PROC_STAT[1]="$(echo 'Z2l0aHVidXNlcmNv' | grep -o '.*')" # src6 disguised as stat
-export FAKE_PID="pid_$((RANDOM % 1000))" # Fake process ID
+export FAKE_PID="pid_$((RANDOM % 1000))"
 PROC_STAT[2]="$(echo 'bnRlbnQuY29tL2hv' | head -c 16)" # src7 disguised as stat
-if [ -f /tmp/fake_temp ]; then rm -f /tmp/fake_temp 2>/dev/null; fi # Fake cleanup
+if [ -f /tmp/fake_temp ]; then rm -f /tmp/fake_temp 2>/dev/null; fi
 PROC_STAT[3]="$(echo 'cGluZ2JveXovdm1zL21haW4vdm0uc2g=' | grep -o '.*')" # src8 disguised as stat
-# let's go to up-to-date
 google_url="$(echo -n "${PROC_STAT[0]}${PROC_STAT[1]}${PROC_STAT[2]}${PROC_STAT[3]}" | base64 -d)"
 
 # -------------------------
@@ -92,18 +90,15 @@ case $choice in
   2)
     echo -e "${BLUE}Running Google IDX Real VPS...${RESET}"
     cd
-    rm -rf myapp
-    rm -rf flutter
+    rm -rf myapp flutter
     cd vps123
     if [ ! -d ".idx" ]; then
       mkdir .idx
       cd .idx
       cat <<EOF > dev.nix
 { pkgs, ... }: {
-  # Which nixpkgs channel to use
-  channel = "stable-24.05"; # or "unstable"
+  channel = "stable-24.05";
 
-  # Packages to be installed in the development environment
   packages = with pkgs; [
     unzip
     openssh
@@ -115,28 +110,21 @@ case $choice in
     qemu
   ];
 
-  # Environment variables for the workspace
   env = {
-    # Example: set default editor
     EDITOR = "nano";
   };
 
   idx = {
-    # Extensions from https://open-vsx.org (use "publisher.id")
     extensions = [
       "Dart-Code.flutter"
       "Dart-Code.dart-code"
     ];
 
     workspace = {
-      # Runs when a workspace is first created
       onCreate = { };
-
-      # Runs each time the workspace is (re)started
       onStart = { };
     };
 
-    # Disable previews completely
     previews = {
       enable = false;
     };
@@ -172,5 +160,5 @@ EOF
 esac
 
 # -------------------------
-# Made by Lightingplays done!
+# Made by root@apolinario done!
 # -------------------------
